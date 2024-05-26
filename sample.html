@@ -1,0 +1,58 @@
+
+
+
+<html>
+
+<head>
+    <script>
+
+
+        let url = "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=revisions&titles=Narendra_Modi&formatversion=2&rvprop=content&rvparse=1&rvsection=0&origin=*"
+
+        fetch(url).then(
+            (data)=>{
+                let kk=data.json().then((json)=>{
+                    console.log(json.query.pages[0].revisions[0]["content"])
+                    {{/*  document.getElementById("content").innerHTML=json.query.pages[0].revisions[0]["content"]  */}}
+
+                    const parser = new DOMParser();
+                    const htmlElement = parser.parseFromString(json.query.pages[0].revisions[0]["content"], 'text/html').documentElement;
+                    {{/*  Filtering Part  */}}
+
+                    let op=''
+
+                        let style = htmlElement.getElementsByTagName("style")
+                        for (i of style){op+=i.outerHTML}
+                        let link = htmlElement.getElementsByTagName("link")
+                        for (i of link){op+=i.outerHTML}
+                        let table = htmlElement.getElementsByClassName("infobox")
+                        for (i of table){op+=i.outerHTML}
+                        console.log(op)
+                    {{/*  Filtering Part end */}}
+
+
+                    {{/*  console.log(htmlElement.getElementsByClassName("infobox"))
+                    console.log(htmlElement.getElementsByTagName("style"))
+
+                    document.getElementById("hh").innerHTML=htmlElement.getElementsByTagName("style")[0].innerHTML
+                    document.getElementById("content").innerHTML=htmlElement.getElementsByClassName("infobox")[0].innerHTML  */}}
+
+                    document.getElementById("content").innerHTML=op
+
+
+                })
+            },(err)=>{console.log(err)}
+            )
+
+    
+              
+
+    </script>
+
+    <style id="hh" ></style>
+
+</head>
+
+<div id="content"></div>
+
+</html>
